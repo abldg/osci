@@ -1,26 +1,29 @@
 #!/usr/bin/env bash
 ## coding=utf-8
 ##==================================----------==================================
-## FILE: a1-shfs.sh
+## FILE: a1-libs.sh
 ## MYPG: abldg, https://github.com/abldg
-## LSCT: 2025-04-17 00:11:48
-## VERS: 1.4
+## LSCT: 2025-04-17 00:22:28
+## VERS: 1.5
 ##==================================----------==================================
-
-##COLORS
+## //////////////////////////////// [COLORS] //////////////////////////////// ##
 {
-  export CRED='\e[31;1m' CGRN='\e[32;1m' CYLW='\e[33;1m'
-  export CBLU='\e[34;1m' CYAN='\e[35;1m' CEND='\e[0m'
-  for x in cyan cblu cgrn cylw; do
-    eval _$x'(){ { printf "${'${x^^}'}${@}${CEND}\n"; } 2>/dev/null; }'
-  done && unset -v x
+  export CRED='\e[31m'
+  export CGRN='\e[32m'
+  export CYLW='\e[33m'
+  export CBLU='\e[34m'
+  export CPLP='\e[35m'
+  export CYAN='\e[36m'
+  export CEND='\e[0m'
   _cred() { { printf "${CRED}${@}${CEND}\n" && exit 1; } 2>/dev/null; }
-  # ##RESET_PSWD
-  # [ "${#SHV_RESET_PW}" -ge 1 ] && {
-  #   echo "root:${SHV_RESET_PW}" | chgpasswd --
-  # } #2>/dev/null
+  _cblu() { { printf "${CBLU}${@}${CEND}\n"; } 2>/dev/null; }
+  _cyan() { { printf "${CYAN}${@}${CEND}\n"; } 2>/dev/null; }
+  _cgrn() { { printf "${CGRN}${@}${CEND}\n"; } 2>/dev/null; }
+  _cplp() { { printf "${CPLP}${@}${CEND}\n"; } 2>/dev/null; }
+  _cylw() { { printf "${CYLW}${@}${CEND}\n"; } 2>/dev/null; }
+  ##
+  declare -gA GPROMPTS=()
 } 2>/dev/null
-
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mt_tipstep() {
   {
