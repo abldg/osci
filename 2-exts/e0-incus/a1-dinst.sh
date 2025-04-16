@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 ## coding=utf-8
 ##==================================----------==================================
-## FILE: install.sh
+## FILE: a1-dinst.sh
 ## MYPG: abldg, https://github.com/abldg
-## LSCT: 2025-04-12 09:42:28
-## VERS: 1.2
+## LSCT: 2025-04-17 00:43:25
+## VERS: 1.3
 ##==================================----------==================================
 dfn_cfgs4incus() {
   {
-    set -- mirrors.sdu.edu.cn/lxc-images-auto
+    set -- mirrors.nju.edu.cn/lxc-images
     local tpl='
       #TDL### tips-about-incus-settings ##
       #TDL#[TIP]. incus-admini-init-for-run-as-cluster-mode
@@ -42,7 +42,7 @@ dfn_cfgs4incus() {
   } 2>/dev/null
 }
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-dfn_incus_ubt() {
+dfn_ubt_incus() {
   ##
   mt_tipstep
   local oscode=${VERSION_CODENAME}
@@ -79,22 +79,22 @@ dfn_incus_ubt() {
   dfn_cfgs4incus
   ##
   incus remote remove images
-  set -- https://mirrors.sdu.edu.cn/lxc-images-auto/
+  set -- https://mirrors.nju.edu.cn/lxc-images/
   incus remote add images $1 --protocol=simplestreams --public
   ##
   set -- /opt/mytools/iok/2-exts/1-incus/incus-ui.crt
   [ -e $1 ] && incus config trust add-certificate $1
 }
-##
-(
-  if [ X = X${SHV_CALLBYMK} ]; then
-    mt_ispkgexist() { :; }
-    mt_wrapdlder() { /usr/bin/curl $@; }
-    mt_tipstep() {
-      echo ${FUNCNAME[1]}
-      . /etc/os-release 2>/dev/null
-    }
-    dfn_incus_ubt
-  fi
-)
+# ##
+# (
+#   if [ X = X${SHV_CALLBYMK} ]; then
+#     mt_ispkgexist() { :; }
+#     mt_wrapdlder() { /usr/bin/curl $@; }
+#     mt_tipstep() {
+#       echo ${FUNCNAME[1]}
+#       . /etc/os-release 2>/dev/null
+#     }
+#     dfn_incus_ubt
+#   fi
+# )
 
