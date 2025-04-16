@@ -3,7 +3,9 @@
 # <u>O</u>perating <u>S</u>ystem <u>C</u>onfiguration <u>I</u>nitialization
 ----
 
-the target machine network-reachable to *[ftp.gnu.org](https://ftp.gnu.org/gnu)*
+- the target machine network-reachable to *[ftp.gnu.org](https://ftp.gnu.org/gnu)*
+- if you live in China Mainland, use mirror-repo: <https://gitee.com/abldg/osci.git>
+- click into [简体中文](README_zh.md)
 
 ## <u>D</u>ownload & <u>E</u>xecute
 

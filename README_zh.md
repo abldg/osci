@@ -1,10 +1,14 @@
 [TOC]
 
 # 操作系统配置初始化
-----
-osci - <u>O</u>perating <u>S</u>ystem <u>C</u>onfiguration <u>I</u>nitialization
 
-前提条件: 目标机器网络可达 [mirrors.ustc.edu.cn][ustc]
+osci : **O**perating **S**ystem **C**onfiguration **I**nitialization
+
+----
+
+- 前提条件: 目标机器网络可达 [mirrors.ustc.edu.cn][ustc]
+- 点击跳转到 [English](README.md) 版本
+
 
 [ustc]: https://mirrors.ustc.edu.cn/ubuntu
 
