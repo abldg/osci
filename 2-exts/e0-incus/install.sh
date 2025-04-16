@@ -8,6 +8,7 @@
 ##==================================----------==================================
 dfn_cfgs4incus() {
   {
+    set -- mirrors.sdu.edu.cn/lxc-images-auto
     local tpl='
       #TDL### tips-about-incus-settings ##
       #TDL#[TIP]. incus-admini-init-for-run-as-cluster-mode
@@ -29,15 +30,15 @@ dfn_cfgs4incus() {
       #TDL#[TIP]. incus-add-certificate
       #TDL#incus config trust add-certificate /opt/mytools/iok/2-exts/1-incus/incus-ui.crt
       #TDL#
-      #TDL#[TIP]. change-default-remote-url-into nju.edu.cn
+      #TDL#[TIP]. change the mirror of remote images
       #TDL#incus remote remove images
-      #TDL#incus remote add images https://mirror.nju.edu.cn/lxc-images/ --protocol=simplestreams --public
+      #TDL#incus remote add images https://RV_RMTIMGURL/ --protocol=simplestreams --public
       #TDL#
       #TDL#[TIP]. some-useful-commands-for-incus(--vm run-as-a-vm)
       #TDL#incus launch images:ubuntu/24.04    ud2404devct
       #TDL#incus launch images:openeuler/24.03 oe2403devct
       #TDL#'
-    echo "$tpl" | sed -r "s@\s+#TDL#@@g"
+    echo "$tpl" | sed -r "s@\s+#TDL#@@g;s@RV_RMTIMGURL@${1}@g"
   } 2>/dev/null
 }
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,7 +79,7 @@ dfn_incus_ubt() {
   dfn_cfgs4incus
   ##
   incus remote remove images
-  set -- https://mirror.nju.edu.cn/lxc-images/
+  set -- https://mirrors.sdu.edu.cn/lxc-images-auto/
   incus remote add images $1 --protocol=simplestreams --public
   ##
   set -- /opt/mytools/iok/2-exts/1-incus/incus-ui.crt

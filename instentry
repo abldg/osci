@@ -11,7 +11,7 @@
   GHPROXY=https://ghfast.top
   MYCACHE=$HOME/.cache/myiok
   MYSHFILES=(
-    $(command ls $PWD/*base/*shfs/*.sh 2>/dev/null)
+    $(command ls $PWD/*base/*-*.sh 2>/dev/null)
     $(command ls $PWD/*devs/*/*dinst.sh 2>/dev/null)
     $(command ls $PWD/*exts/*/*.sh 2>/dev/null)
   )

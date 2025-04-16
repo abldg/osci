@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 ## coding=utf-8
 ##==================================----------==================================
-## FILE: 00-base.sh
+## FILE: a1-shfs.sh
 ## MYPG: abldg, https://github.com/abldg
-## LSCT: 2025-04-12 10:25:12
-## VERS: 1.3
+## LSCT: 2025-04-17 00:11:48
+## VERS: 1.4
 ##==================================----------==================================
 
 ##COLORS
@@ -24,7 +24,8 @@
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mt_tipstep() {
   {
-    [ X1 != X${SHV_CALLBYMK} ] && exit 1
+    [ X0 = X${SHV_DEBUGTHZ:-0} ] && return
+    # [ X1 != X${SHV_CALLBYMK} ] && exit 1
     local ci=($(caller 0))
     local msg="[${CBLU}${ci[2]}$CEND,${CGRN}${ci[1]}$CEND,${CYLW}${ci[0]}$CEND]"
     printf "====>${msg}${1:+ [${CYAN}$1${CEND}]}<====\n"

@@ -1,16 +1,22 @@
 ifneq (Yx86_64X,Y$(shell arch)X)
-only_for_run_on_x64_machine:
+ifneq (Yaarch64X,Y$(shell arch)X)
+only_for_run_on_amd64_or_arm64_machine:
 	@echo "[WARN_TIP]: this tool $@ !!!" | sed 's@_@ @g'; true
-else
+endif
+endif
 ###------------------------------BGN--------------------------------------------
-VX:=$(if $(VBSE),-x,$(if $(nx),,-x))
-ifeq (,$(VX))
+##
+# VE:=$(if $(ve),$(ve),$(if $(en),en,cn))
+VD:=$(if $(vd),$(vd),$(if $(dbg),1,0))
+VX:=$(if $(vx),-x,)
 VQ:=@
-else
+ifeq (-x,$(VX))
 VQ:=
+VD:=1
 endif
 ##
 V2S+=SHV_CALLBYMK=1
+V2S+=SHV_DEBUGTHZ=$(VD)
 V2S+=SHV_RESET_HN=$(if $(HN),$(HN),)
 V2S+=SHV_RESET_IP=$(if $(IP),$(IP),)
 V2S+=SHV_RESET_PW=$(if $(PW),$(PW),$(if $(pswd),$(pswd),))
@@ -23,10 +29,10 @@ V2S+=SHV_PCHS_DIR=$(abspath $(wildcard */*pchs))
 -include helper.mk
 
 ##extmod/xxxx
-lst_optional+=extmods/incus_ubt
+lst_optional+=extmods/ubt_incus
 lst_optional+=showtip/cfgs4incus
 
-lst_optional+=extmods/devstack_ubt
+lst_optional+=extmods/ubt_sealos
 # [required]///////////////////////////////
 all_required: $(lst_required)
 	@printf "====>[done-task-list]<==== $(lst_required)" | xargs -n1; true
@@ -40,4 +46,3 @@ $(lst_required) $(lst_optional):
 ##phony-targets
 .PHONY: all_required $(lst_total)
 ###------------------------------END--------------------------------------------
-endif

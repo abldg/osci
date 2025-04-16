@@ -26,7 +26,7 @@ systemctl enable incus --now
 
 ```bash
 ####使用南京大学的镜像(清华的镜像因同步失败已失效)
-murl="https://mirror.nju.edu.cn/lxc-images/"
+murl="https://mirrors.sdu.edu.cn/lxc-images-auto/"
 incus remote remove images
 incus remote add images ${murl} --protocol=simplestreams --public
 ##test: create a ubuntu22.04 vm
