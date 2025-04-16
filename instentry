@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+## coding=utf-8
+##==================================----------==================================
+## FILE: instentry
+## MYPG: abldg, https://github.com/abldg
+## LSCT: 2025-04-12 14:06:05
+## VERS: 1.5
+##==================================----------==================================
+# list_shfiles()
+{
+  GHPROXY=https://ghfast.top
+  MYCACHE=$HOME/.cache/myiok
+  MYSHFILES=(
+    $(command ls $PWD/*base/*shfs/*.sh 2>/dev/null)
+    $(command ls $PWD/*devs/*/*dinst.sh 2>/dev/null)
+    $(command ls $PWD/*exts/*/*.sh 2>/dev/null)
+  )
+  [ X0 = X$(id -u) ] && SP= || SP='sudo '
+  TEE="${SP}tee" SED="${SP}sed"
+  XTAR="${SP}tar --strip-components=1 --no-same-owner"
+} 2>/dev/null
+###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if [ X1 != X${SHV_CALLBYMK} ]; then
+  unify_lsctvers() {
+    local scmds=(-e "s@(^## LSCT:).*@\1 $(date +'%F %T')@")
+    set -- ${1#v}
+    [ $# -eq 1 ] && scmds+=(-e "s@(^## VERS:).*@\1 ${1}@")
+    sed -i -r "${scmds[@]}" ${MYSHFILES[@]} $0
+  }
+  unify_lsctvers $@
+###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+else
+  [ X != X${SHV_TSKID} ] && {
+    {
+      mkdir -p $MYCACHE $HOME/.config /usr/local/bin 2>/dev/null
+      ##load-shfuncs-under-this-dir-and-subdirs
+      for x in ${MYSHFILES[@]} /etc/os-release; do
+        [ -e $x ] && . $x
+      done && unset -v x
+      mt_chkpkgcmd
+    } 2>/dev/null
+    mt_tipstep "TASK::${SHV_TSKTP:+$SHV_TSKTP/}$SHV_TSKID"
+    set -- $(declare -F | awk '/ dfn_/&&/'${SHV_TSKID}'$/{printf $3}')
+    [ "X" != "X$1" ] && $1
+  }
+fi #2>/dev/null

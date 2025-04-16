@@ -1,0 +1,39 @@
+[source.crates-io]
+replace-with = "rsproxy-sparse"
+[source.rsproxy-sparse]
+registry = "sparse+RV_RSCN/index/"
+[registries.rsproxy]
+index = "RV_RSCN/crates.io-index"
+[source.rsproxy]
+registry = "RV_RSCN/crates.io-index"
+
+[net]
+git-fetch-with-cli = true
+
+[build]
+target-dir = "/tmp/cargo-target"  # 指定构建输出目录
+rustflags = ["-C", "opt-level=3"]
+
+[env]
+RUST_BACKTRACE = "1"  # 默认启用 backtrace
+
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+
+[alias]     # command aliases
+b = "build"
+c = "check"
+t = "test"
+r = "run"
+rr = "run --release"
+# space_example = ["run", "--release", "--", "\"command list\""]
+
+[cargo-new]
+vcs = "none"  # VCS to use ("git", "none")
+
+[term]
+verbose = false        # whether cargo provides verbose output
+color = "auto"         # whether cargo colorizes output
+progress.when = "auto" # whether cargo shows progress bar
+progress.width = 80    # width of progress bar
+

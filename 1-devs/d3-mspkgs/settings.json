@@ -1,0 +1,60 @@
+{
+  "accessibility.verbosity.panelChat": false,
+  "accessibility.verbosity.inlineChat": false,
+  "chat.commandCenter.enabled": false,
+  "chat.detectParticipant.enabled": false,
+  "chat.experimental.statusIndicator.enabled": false,
+  "C_Cpp.formatting": "clangFormat",
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "C_Cpp.clang_format_sortIncludes": false,
+  "C_Cpp.default.cStandard": "gnu11",
+  "C_Cpp.default.cppStandard": "gnu++14",
+  "C_Cpp.autoAddFileAssociations": false,
+  "files.autoSave": "afterDelay",
+  "files.trimTrailingWhitespaceInRegexAndStrings": false,
+  "files.associations": {
+    "*.h": "c"
+  },
+  "editor.trimAutoWhitespace": false,
+  "editor.guides.bracketPairs": "active",
+  "editor.guides.indentation": true,
+  "editor.minimap.enabled": false,
+  "editor.mouseWheelZoom": true,
+  "editor.tabSize": 2,
+  "editor.rulers": [
+    {
+      "column": 80,
+      "color": "#48693e"
+    },
+    {
+      "column": 100,
+      "color": "#ff2fc1"
+    },
+    {
+      "column": 120,
+      "color": "#ff7700"
+    }
+  ],
+  "editorconfig.generateAuto": false,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "extensions.autoUpdate": false,
+  "extensions.ignoreRecommendations": true,
+  "git.confirmSync": false,
+  "inlineChat.holdToSpeech": false,
+  "inlineChat.lineNaturalLanguageHint": false,
+  "notebook.experimental.generate": false,
+  "shellformat.path": "/usr/bin/shfmt",
+  "shellformat.effectLanguages": [
+    "shellscript",
+    "dockerfile",
+    "dotenv",
+    "hosts",
+    "gitignore",
+    "properties"
+  ],
+  "window.commandCenter": false,
+  "workbench.colorTheme": "Solarized Light",
+  "workbench.editor.enablePreview": false,
+  "workbench.startupEditor": "none"
+}

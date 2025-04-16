@@ -1,0 +1,51 @@
+#ldg_init_env#
+[ -z "$PS1" ] && return
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# loads-my-extensions
+{
+  sfldfuncs() {
+    : ${MYINITDIR:=$HOME/.myinit}
+    ##load-shvars-and-shfuncs
+    local x= flst=
+    flst+=($(ls /etc/profile.d/z9*.sh 2>/dev/null))
+    flst+=($(ls ${MYINITDIR}/0*_plg/[0-9]*.sh 2>/dev/null))
+    flst+=(/usr/share/bash-completion/bash_completion)
+    flst+=($HOME/.bash_aliases)
+    flst+=($(ls $HOME/.config/mydev_* 2>/dev/null))
+    for x in ${flst[@]}; do [ -e $x ] && . $x; done 2>/dev/null
+    ##for-vscode-remote-cli
+    sfu.etcprofile
+    ##clean-path-duplications
+    sfu.tiny_path
+    ##
+    sft.chk_pkgcmd
+    ##for-customized-ps1-title
+    # export PS1='WKDIR:[\e[32m\w\e[0m],UHOST:[\e[34m\u@\h\e[0m]# '
+    # export MYDEVDIR="$HOME/.develdir"
+    # mkdir -p ${MYDEVDIR} 2>/dev/null
+    ##for-petalinux-v2018.3
+    set -- $HOME/.swbase/plnx20183
+    [ -d $1 ] && export PLNXDIR="$1"
+    export EDITOR=vi
+  }
+  sfldfuncs
+  unset -f sfldfuncs
+} 2>/dev/null

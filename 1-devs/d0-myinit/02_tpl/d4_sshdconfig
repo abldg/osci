@@ -1,0 +1,67 @@
+
+# ====== 基础安全加固 ======
+Port 22                     # 修改默认SSH端口（避免22端口的自动化扫描）
+Protocol 2                  # 禁用SSHv1
+AddressFamily inet          # 仅使用IPv4（若无需IPv6）
+ListenAddress 0.0.0.0       # 限制监听IP（按需设置）
+
+# ====== 认证与权限控制 ======
+PermitRootLogin no                 # 完全禁用root登录
+PermitEmptyPasswords no            # 禁止空密码
+PasswordAuthentication no          # 强制密钥认证（禁用密码）
+PubkeyAuthentication yes           # 启用公钥认证
+#AllowUsers user1 user2@192.168.1.* # 白名单用户+IP限制（按需设置）
+#AllowGroups ssh-users              # 白名单用户组
+MaxAuthTries 2                     # 单次连接最大认证尝试次数
+LoginGraceTime 30s                 # 登录超时时间（快速断开未认证连接）
+UsePAM yes                         # 启用PAM模块（配合Fail2Ban）
+
+# ====== 加密算法强化 ======
+# 禁用弱算法，优先选择ChaCha20和AES-GCM
+HostKey /etc/ssh/ssh_host_ed25519_key # 优先使用Ed25519密钥
+HostKey /etc/ssh/ssh_host_rsa_key     # RSA密钥建议4096位以上
+
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+HostKeyAlgorithms ssh-ed25519,ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512,rsa-sha2-512-cert-v01@openssh.com
+
+# ====== 会话与连接限制 ======
+ClientAliveInterval 300 # 客户端无活动300秒发送保活包
+ClientAliveCountMax 2   # 最多发送2次保活包后断开
+MaxStartups 5:50:10     # 控制并发未认证连接（初始:概率拒绝:最大）
+MaxSessions 3           # 单用户最大并发会话
+
+# ====== 高级防护 ======
+UseDNS no               # 禁用DNS反向解析（加速+防SSH劫持）
+Compression no          # 禁用压缩（防御CRIME攻击）
+AllowAgentForwarding no # 禁用SSH代理转发（除非必要）
+AllowTcpForwarding no   # 禁用TCP端口转发（按需开启）
+X11Forwarding no        # 禁用X11图形转发
+PermitTunnel no         # 禁用VPN隧道功能
+DebianBanner no         # 隐藏SSH版本信息（防指纹识别）
+StrictModes yes         # 严格检查文件权限（如~/.ssh目录）
+
+# ====== 日志与审计 ======
+SyslogFacility AUTH # 将日志发送到系统日志
+LogLevel VERBOSE    # 记录详细日志（可追踪攻击行为）
+
+# ====== 自定义安全扩展 ======
+# 启用证书吊销列表（CRL）检查（需提前配置）
+# RevokedKeys /etc/ssh/revoked_keys
+
+# 防御暴力破解（需配合Fail2Ban或自定义脚本）
+# UsePAM yes + Fail2Ban配置参考：
+# https://github.com/fail2ban/fail2ban/blob/master/config/jail.d/sshd.conf
+
+# ====== 可选：沙盒限制 ======
+# 限制SFTP用户访问目录（需匹配用户/组）
+Subsystem sftp internal-sftp -f AUTH -l INFO
+# Match Group sftp-users
+#   ChrootDirectory /sftp/%u
+#   ForceCommand internal-sftp
+#   AllowTcpForwarding no
+#   PermitTTY no
+
+# ====== 防内核漏洞利用 ======
+UseRoaming no # 防御CVE-2016-0777/0787漏洞
