@@ -12,7 +12,7 @@ dfn_sshkey() {
   [ $# -eq 1 ] || return
   (
     cd ${1%/*} &&
-      tar -xf bak.skey.tgz -C $HOME/
+      tar -xf bak.skey.tgz -C $HOME/ --no-same-owner
     set -- $HOME/.ssh
     chmod 700 $1 && chmod 600 $1/id_* $1/authorized_keys
   )

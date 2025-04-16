@@ -8,6 +8,17 @@
 ##==================================----------==================================
 
 dfn_nvim() {
+  mt_tipstep
+  ##
+  set -- $(mt_thzshflocation)
+  [ $# -eq 1 ] || return
+  (cd ${1%/*} && tar -xf bak.nvim.tgz -C $HOME/ --no-same-owner)
+  ##mgr-by-git
+  set -- $HOME/.config/nvim
+  [ -d $1 ] && (
+    cd $1 && git init && git add . -f && git commit -m 'reinit'
+  ) &>/dev/null
+  ##
   trydl_nvim() {
     ##arg1: owner/repo,     like mvdan/sh
     ##arg2: version_string, like 1.7.7
@@ -29,22 +40,6 @@ dfn_nvim() {
       ${XTAR} -C /usr -xf ${dltgz}
       (printf "ln -sf /usr/bin/nvim /usr/bin/%s\n" vim vi | sudo bash -x)
     )
-  }
-  ##----------------------------------------------------------------------------
-  mt_tipstep
-  set -- $HOME/.config $(mt_thzshflocation)
-  [ $# -eq 2 ] && [ -e $2 ] && {
-    mkdir -p ${1} 2>/dev/null
-    set -- ${1}/nvim ${2%/*}
-    [ -d $2 ] && {
-      rm -rf ${1} 2>/dev/null
-      mkdir -p $1
-      cd $2 && cp -rf autoload ldg t init.vim $1/ 2>/dev/null
-    }
-    ##mgr-by-git
-    [ -d $1 ] && (
-      cd $1 && git init && git add . -f && git commit -m 'reinit'
-    ) &>/dev/null
   }
   trydl_nvim neovim/neovim-releases,0.10.3,linux64.tar.gz
 }
