@@ -37,7 +37,7 @@ dfn_nvim() {
       rm -f $1 2>/dev/null
     }
     [ -s ${dltgz} ] && (
-      ${XTAR} -C /usr -xf ${dltgz}
+      ${XTAR} --strip-components=1 -C /usr -xf ${dltgz}
       (printf "ln -sf /usr/bin/nvim /usr/bin/%s\n" vim vi | sudo bash -x)
     )
   }

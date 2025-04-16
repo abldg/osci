@@ -17,7 +17,7 @@
   )
   [ X0 = X$(id -u) ] && SP= || SP='sudo '
   TEE="${SP}tee" SED="${SP}sed"
-  XTAR="${SP}tar --strip-components=1 --no-same-owner"
+  XTAR="${SP}tar --no-same-owner"
 } 2>/dev/null
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if [ X1 != X${SHV_CALLBYMK} ]; then

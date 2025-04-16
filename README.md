@@ -52,5 +52,5 @@ mydoinst $@
 ## All Content Above Save Into a Shell
 
 ```bash
-sed -n "/^#STS_BGN$/,/^#STS_END$/{p}" $HOME/osci/README.md | tee anx.sh
+sed -n "/^#STS_BGN$/,/^#STS_END$/{p}" README.md | tee anx.sh
 ```
