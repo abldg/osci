@@ -8,7 +8,6 @@
 ##==================================----------==================================
 dfn_cfgs4incus() {
   {
-    set -- mirrors.nju.edu.cn/lxc-images
     local tpl='
       #TDL### tips-about-incus-settings ##
       #TDL#[TIP]. incus-admini-init-for-run-as-cluster-mode
@@ -23,22 +22,25 @@ dfn_cfgs4incus() {
       #TDL#Would you like stale cached images to be updated automatically? (yes/no) [default=yes]:
       #TDL#Would you like a YAML "init" preseed to be printed? (yes/no) [default=no]:
       #TDL#
-      #TDL#[TIP]. create-zfs-pool-[disks:/dev/sdX]
-      #TDL#incus storage create disks zfs source=/dev/sdX
+      #TDL#[TIP]. create-zfs-pool-[disks:/dev/RV_LASTDISK]
+      #TDL#incus storage create disks zfs source=/dev/RV_LASTDISK
       #TDL#incus profile device add default root disk path=/ pool=disks
       #TDL#
       #TDL#[TIP]. incus-add-certificate
-      #TDL#incus config trust add-certificate /opt/mytools/iok/2-exts/1-incus/incus-ui.crt
+      #TDL#incus config trust add-certificate RV_UICRT
       #TDL#
-      #TDL#[TIP]. change the mirror of remote images
+      #TDL#[TIP]. change the mirror of remote images: RV_RMTIMGURL
       #TDL#incus remote remove images
-      #TDL#incus remote add images https://RV_RMTIMGURL/ --protocol=simplestreams --public
+      #TDL#incus remote add images RV_RMTIMGURL --protocol=simplestreams --public
       #TDL#
       #TDL#[TIP]. some-useful-commands-for-incus(--vm run-as-a-vm)
       #TDL#incus launch images:ubuntu/24.04    ud2404devct
       #TDL#incus launch images:openeuler/24.03 oe2403devct
       #TDL#'
-    echo "$tpl" | sed -r "s@\s+#TDL#@@g;s@RV_RMTIMGURL@${1}@g"
+    set -- https://mirrors.nju.edu.cn/lxc-images $(mt_thzshflocation)
+    echo "$tpl" | sed -r -e "s@\s+#TDL#@@g" \
+      -e "s@RV_RMTIMGURL@${1}@g;s@RV_UICRT@${2%/*}/incus-ui.crt@g" \
+      -e "s@RV_LASTDISK@$(lsblk | awk '/^[nsv]/{print $1}' | tail -1)@g"
   } 2>/dev/null
 }
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,4 +99,3 @@ dfn_ubt_incus() {
 #     dfn_incus_ubt
 #   fi
 # )
-

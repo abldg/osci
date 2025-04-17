@@ -21,7 +21,7 @@ osci : **O**perating **S**ystem **C**onfiguration **I**nitialization
 mydoinst() {
   { [ ! -e /etc/os-release ] && return || . /etc/os-release; } 2>/dev/null
   #####
-  local DPKGS="curl git make jq bash-completion" NEWIP=$1
+  local DPKGS="curl git make jq bash-completion"
   #####
   if [ X${ID_LIKE}Y${ID}Z == XdebianYubuntuZ ]; then ## Ubuntu
     ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +33,7 @@ mydoinst() {
     ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     set -- /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources
     sed -i -r 's@//(archive|security)@//cn.archive@' $1 2>/dev/null
-    sed -i -r "^/URIs:/s|.*|URIs: ${mary[${MIR_IDX:-0}]}|" $2 2>/dev/null
+    sed -i -r "^/URIs:/s|.*|URIs: ${mary[${MRIDX:-0}]}|" $2 2>/dev/null
     ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     apt update -y && apt install -y ${DPKGS}
   else ## OpenEuler
