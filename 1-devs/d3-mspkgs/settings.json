@@ -1,7 +1,6 @@
 {
   "accessibility.verbosity.panelChat": false,
   "accessibility.verbosity.inlineChat": false,
-  "chat.commandCenter.enabled": false,
   "chat.detectParticipant.enabled": false,
   "chat.experimental.statusIndicator.enabled": false,
   "C_Cpp.formatting": "clangFormat",
@@ -53,8 +52,41 @@
     "gitignore",
     "properties"
   ],
-  "window.commandCenter": false,
-  "workbench.colorTheme": "Solarized Light",
+  "workbench.colorTheme": "Winter Pearl Theme",
   "workbench.editor.enablePreview": false,
-  "workbench.startupEditor": "none"
+  "workbench.startupEditor": "none",
+  "chat.agent.enabled": false,
+  "chat.editing.confirmEditRequestRemoval": false,
+  "chat.editing.confirmEditRequestRetry": false,
+  "chat.extensionTools.enabled": false,
+  "chat.focusWindowOnConfirmation": false,
+  "chat.mcp.enabled": false,
+  "chat.promptFiles": false,
+  "chat.promptFilesLocations": {
+    ".github/prompts": false
+  },
+  "chat.setupFromDialog": false,
+  "chat.unifiedChatView": false,
+  "telemetry.feedback.enabled": false,
+  "chat.useFileStorage": false,
+  "inlineChat.accessibleDiffView": "off",
+  "window.titleBarStyle": "native",
+  "window.commandCenter": false,
+  "workbench.enableExperiments": false,
+  "update.showReleaseNotes": false,
+  "extensions.gallery.useUnpkgResourceApi": false,
+  "update.mode": "none",
+  "telemetry.telemetryLevel": "off",
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "npm.fetchOnlinePackageInfo": false,
+  "settingsSync.keybindingsPerPlatform": false,
+  "extensions.autoCheckUpdates": false,
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  "window.menuBarVisibility": "toggle",
+  "chat.commandCenter.enabled": false,
+  "window.customTitleBarVisibility": "never",
+  "workbench.editor.autoLockGroups": {
+    "workbench.editor.chatSession": false,
+    "mainThreadWebview-simpleBrowser.view": false
+  }
 }
