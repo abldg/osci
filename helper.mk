@@ -15,7 +15,7 @@ egs_cfgs4ubt+=SHV_NPAPLNOW=$(if $(NP),$(NP),$(if $(npnn),$(npnn),0))
 # lst_optional+=$(pfx_cfg)/mywrapper
 lst_optional+=$(pfx_cfg)/cfgs4vsc
 lst_optional+=$(pfx_cfg)/cfgs4sshd
-lst_optional+=$(pfx_cfg)/fix_ubt2204n6n
+lst_optional+=$(pfx_cfg)/fix_ubt2204_n5n
 ##
 lst_optional+=$(pfx_cfg)/cfgs4ntwk
 egs_cfgs4ntwk+=SHV_RESET_HN=$(if $(HN),$(HN),)

@@ -19,8 +19,6 @@ V2S+=SHV_CALLBYMK=1
 V2S+=SHV_DEBUGTHZ=$(VD)
 V2S+=SHV_SKPEXIST=$(if $(SK),$(SK),$(if $(skip),$(skip),1))
 ##
-V2S+=SHV_PCHS_DIR=$(abspath $(wildcard */*pchs))
-##
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -include helper.mk
 

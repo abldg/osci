@@ -7,13 +7,13 @@
 ## VERS: 1.3
 ##==================================----------==================================
 
-dfn_fix_ubt2204n6n() {
+dfn_fix_ubt2204_n5n() {
   mt_tipstep
   set -- ${NAME} ${ID} ${VERSION_CODENAME}
   [ "X${1}Y${2}Z${3}" != "XUbuntuYubuntuZjammy" ] && return
-  set -- netplan
-  set -- ${SHV_PCHS_DIR}/*ubt2204*.tgz /usr/share/$1/$1/cli/commands/apply.py
-  [ -e $1 ] && [ -e $2 ] && sudo tar --no-same-owner -C / -xf $1
+  set -- netplan $(mt_thzshflocation)
+  set -- /usr/share/$1/$1/cli/commands/apply.py ${2%/*}/${FUNCNAME#dfn_}.tgz
+  [ -e $2 ] && [ -e $1 ] && sudo tar --no-same-owner -C / -xf $2
 }
 
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
