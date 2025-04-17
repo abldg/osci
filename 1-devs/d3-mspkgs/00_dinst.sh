@@ -67,16 +67,16 @@ dfn_cfgs4vsc() {
     local exts= x=
     exts+=(
       geeebe.duplicate
-      johnpapa.winteriscoming
+      # johnpapa.winteriscoming
       editorconfig.editorconfig
       foxundermoon.shell-format
-      suryashanm.winter-pearl-theme
+      # suryashanm.winter-pearl-theme
     )
-    # exts+=(
-    #   ms-vscode.hexeditor
-    #   ms-vscode.makefile-tools
-    #   kennylong.kubernetes-yaml-formatter
-    # )
+    exts+=(
+      # ms-vscode.hexeditor
+      # ms-vscode.makefile-tools
+      kennylong.kubernetes-yaml-formatter
+    )
     ##
     rm -rf $1 2>/dev/null
     mkdir -p $1 #2>/dev/null
@@ -110,7 +110,7 @@ dfn_cfgs4vsc() {
     set -- $1/$2 $HOME/.config/Code/User
   fi
   ##
-  xf_instexts $1
-  ##
   xf_uptconfs $2
+  ##
+  xf_instexts $1
 }
