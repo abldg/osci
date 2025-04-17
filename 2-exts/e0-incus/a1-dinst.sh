@@ -33,6 +33,12 @@ dfn_cfgs4incus() {
       #TDL#incus remote remove images
       #TDL#incus remote add images RV_RMTIMGURL --protocol=simplestreams --public
       #TDL#
+      #TDL#[TIP]. update profile of default
+      #TDL#incus profile set default limits.cpu 4
+      #TDL#incus profile set default limits.memory 4GiB
+      #TDL#incus profile set default security.nesting true
+      #TDL#incus profile set default security.privileged true
+      #TDL#
       #TDL#[TIP]. some-useful-commands-for-incus(--vm run-as-a-vm)
       #TDL#incus launch images:ubuntu/24.04    ud2404devct
       #TDL#incus launch images:openeuler/24.03 oe2403devct
@@ -86,6 +92,11 @@ dfn_ubt_incus() {
   ##
   set -- $(dirname $(mt_thzshflocation))/incus-ui.crt
   [ -e $1 ] && incus config trust add-certificate $1
+  ##
+  incus profile set default limits.cpu 4
+  incus profile set default limits.memory 4GiB
+  incus profile set default security.nesting true
+  incus profile set default security.privileged true
 }
 # ##
 # (
