@@ -13,57 +13,63 @@ dfn_fix_ubt2204n6n() {
   [ "X${1}Y${2}Z${3}" != "XUbuntuYubuntuZjammy" ] && return
   set -- netplan
   set -- ${SHV_PCHS_DIR}/*ubt2204*.tgz /usr/share/$1/$1/cli/commands/apply.py
-  [ -e $1 ] && [ -e $2 ] && ${XTAR} -C / -xf $1
+  [ -e $1 ] && [ -e $2 ] && sudo tar --no-same-owner -C / -xf $1
 }
 
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-dfn_cfgs4ubt() {
-  xf_upt_source() {
-    mt_tipstep
-    local oscode=${VERSION_CODENAME}
-    if [[ $oscode != @(noble|jammy|focal|bionic) ]]; then
-      _cylw "deb822 only support 18.04+"
-      return
-    fi
-    ##
-    set -- /etc/apt/sources.list
-    echo "# Ubuntu sources have moved to $1.d/ubuntu.sources" | ${TEE} $1
-    ##
-    set -- ${1}.d/ubuntu.sources
-    {
-      local tpl_deb822='Types: deb
-        #TDL#URIs: https://mirrors.ustc.edu.cn/ubuntu/
+dfn_fix_aptmirurl() {
+  mt_tipstep
+  if [[ $VERSION_CODENAME != @(noble|jammy|focal|bionic) ]]; then
+    _cylw "deb822 only support 18.04+"
+    return
+  fi
+  ##
+  set -- /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources
+  {
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    local mary=(tuna.tsinghua.edu.cn ustc.edu.cn aliyun.com)
+    local murl=${mary[${SHV_MIRURL_IDX:-0}]}
+    echo "# Ubuntu sources have moved to $2" | ${TEE} $1
+    local tpl='Types: deb
+        #TDL#URIs: https://mirrors.RV_MIRURL/ubuntu/
         #TDL#Suites: RV_CE RV_CE-updates RV_CE-backports RV_CE-security
         #TDL#Components: main restricted universe multiverse
         #TDL#Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
         #TDL#'
-      echo "$tpl_deb822" | sed -r -e 's@\s+#TDL#@@g' \
-        -e "s@RV_CE@${oscode}@g" | ${TEE} $1
-    } 2>/dev/null
-  }
-  xf_fix_wait_ifns_ol() {
-    mt_tipstep
-    set -- /etc/systemd/system/network-online.target.wants
-    [ -d $1 ] || return
-    (
-      cd $1
-      ${SED} -i '/^TimeoutStartSec=/d' *.service
-      ${SED} -i '/^RemainAfterExit=yes/aTimeoutStartSec=2' *.service
-    )
-  }
-  xf_fix_resolvcfg() {
-    mt_tipstep
-    set -- /etc/systemd/resolved.conf /etc/resolv.conf
-    local ka=
-    if [ -e $1 ]; then
-      ka=(DNS=114.114.114.114 FallbackDNS=223.5.5.5)
-      ${SED} -i -r -e '/^#?DNS=/s@.*@'${ka[0]}'@' \
-        -e '/^#?FallbackDNS=/s@.*@'${ka[1]}'@' $1
-    fi
-    ${SP}rm -f $2 2>/dev/null
-    ka=(114.114.114.114 223.5.5.5)
-    printf 'nameserver %s\n' ${ka[@]} | ${TEE} $2
-  }
+    echo "$tpl" | sed -r \
+      -e "s@RV_CE@${VERSION_CODENAME}@g" \
+      -e "s@RV_MIRURL@${murl:-${mary}}@g" \
+      -e 's@\s+#TDL#@@g' |
+      ${TEE} $2
+  } 2>/dev/null
+}
+
+###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dfn_fix_wait4ifsonline() {
+  mt_tipstep
+  set -- /etc/systemd/system/network-online.target.wants
+  [ -d $1 ] || return
+  (
+    cd $1
+    ${SED} -i '/^TimeoutStartSec=/d' *.service
+    ${SED} -i '/^RemainAfterExit=yes/aTimeoutStartSec=2' *.service
+  )
+}
+dfn_fix_resolvfile() {
+  mt_tipstep
+  set -- /etc/systemd/resolved.conf /etc/resolv.conf
+  local ka=
+  if [ -e $1 ]; then
+    ka=(DNS=114.114.114.114 FallbackDNS=223.5.5.5)
+    ${SED} -i -r -e '/^#?DNS=/s@.*@'${ka[0]}'@' \
+      -e '/^#?FallbackDNS=/s@.*@'${ka[1]}'@' $1
+  fi
+  ${SP}rm -f $2 2>/dev/null
+  ka=(114.114.114.114 223.5.5.5)
+  printf 'nameserver %s\n' ${ka[@]} | ${TEE} $2
+}
+###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dfn_cfgs4ubt() {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   mt_tipstep
   set -- ${NAME} ${ID}
@@ -90,9 +96,9 @@ dfn_cfgs4ubt() {
     ${SP}systemctl mask $1
     [ X1 = X${SHV_ENB_MLUS:-0} ] && ${SP}systemctl set-default $2
     ##
-    xf_fix_wait_ifns_ol
-    xf_fix_resolvcfg
-    xf_upt_source
+    dfn_fix_wait4ifsonline
+    dfn_fix_resolvfile
+    dfn_fix_aptmirurl
     ##
     dfn_checkpkgs
     dfn_cfgs4sshd

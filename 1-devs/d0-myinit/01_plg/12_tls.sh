@@ -154,7 +154,7 @@ _dosfn() {
     [ X = X$(command -v jq) ] && $PKG_INST jq
     local jx_ifngw='.[0]|.dev,.gateway'
     set -- $(ip -4 -j route show default | jq "${jx_ifngw}" | xargs)
-    local gp=${2%.*} nh=${SHV_RESET_HN} x=
+    local gp=${2%.*} nh=${SHV_NEW_HN} x=
     set -- $(ip -4 -j addr show dev $1 | jq '.[]|.addr_info[]|.local' | xargs)
     for x in $@; do [ X${x#$gp} != X${x} ] && break; done
     [ X != X${x} ] && {

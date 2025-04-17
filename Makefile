@@ -17,11 +17,7 @@ endif
 ##
 V2S+=SHV_CALLBYMK=1
 V2S+=SHV_DEBUGTHZ=$(VD)
-V2S+=SHV_RESET_HN=$(if $(HN),$(HN),)
-V2S+=SHV_RESET_IP=$(if $(IP),$(IP),)
-V2S+=SHV_RESET_PW=$(if $(PW),$(PW),$(if $(pswd),$(pswd),))
-V2S+=SHV_EXIST_SK=$(if $(SK),$(SK),$(if $(skip),$(skip),1))
-V2S+=SHV_NPAPLNOW=$(if $(NP),$(NP),$(if $(npnn),$(npnn),0))
+V2S+=SHV_SKPEXIST=$(if $(SK),$(SK),$(if $(skip),$(skip),1))
 ##
 V2S+=SHV_PCHS_DIR=$(abspath $(wildcard */*pchs))
 ##
@@ -41,7 +37,7 @@ showtip/:showtip/cfgs4incus
 
 # [summary]////////////////////////////////
 $(lst_required) $(lst_optional):
-	@(SHV_TSKID=$(@F) SHV_TSKTP=$(@D) $(V2S) bash $(VX) instentry); true
+	$(VQ)($(V2S) SHV_TSKID=$(@F) SHV_TSKTP=$(@D) ${egs_${@F}} bash $(VX) instentry); true
 
 ##phony-targets
 .PHONY: all_required $(lst_total)

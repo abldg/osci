@@ -79,9 +79,10 @@ dfn_cfgs4ntwk() {
         -e "s@RV_CIDR_SPL@${4}@g" \
         -e 's@\s+#TDL#@@g' >$tmp_saved
     } 2>/dev/null
-    set -- /etc/netplan/00-static.yaml
-    sudo rm -f $1 2>/dev/null
-    sudo install -m 0600 $tmp_saved $1
+    ##
+    set -- /etc/netplan
+    sudo rm -rf $1/*.yaml 2>/dev/null
+    sudo install -m 0600 $tmp_saved $1/00-static.yaml
   }
   ###///////////////////////////////////////////////////////////////////////////
   xf_upt_oescrt() {

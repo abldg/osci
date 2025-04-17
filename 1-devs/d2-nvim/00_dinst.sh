@@ -24,7 +24,7 @@ dfn_nvim() {
     ##arg2: version_string, like 1.7.7
     ##arg3: filename-ends,  like linux-x64.tgz
     local xbf=$(command -v nvim)
-    [ X != X${xbf} ] && [ X1 = X${SHV_EXIST_SK:-1} ] && {
+    [ X != X${xbf} ] && [ X1 = X${SHV_SKPEXIST:-1} ] && {
       (printf "ln -sf ${xbf} /usr/bin/%s\n" vim vi | sudo bash -x)
       return
     }

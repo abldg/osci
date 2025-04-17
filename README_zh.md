@@ -1,16 +1,17 @@
 [TOC]
 
+[1]: https://mirrors.ustc.edu.cn/ubuntu
+[1]: README.md
+
 # 操作系统配置初始化
 
 osci : **O**perating **S**ystem **C**onfiguration **I**nitialization
 
 ----
 
-- 前提条件: 目标机器网络可达 [mirrors.ustc.edu.cn][ustc]
-- 点击跳转到 [English](README.md) 版本
+- 前提条件: 目标机器网络可达 [mirrors.ustc.edu.cn][1]
+- 点击跳转到 [English][2] 版本
 
-
-[ustc]: https://mirrors.ustc.edu.cn/ubuntu
 
 
 ## 一键下载代码并执行
@@ -18,30 +19,29 @@ osci : **O**perating **S**ystem **C**onfiguration **I**nitialization
 ```bash
 #STS_BGN
 mydoinst() {
-  local NEWIP=$1
-  local DPKGS="curl git make jq bash-completion"
+  { [ ! -e /etc/os-release ] && return || . /etc/os-release; } 2>/dev/null
   #####
-  set -- /etc/os-release
-  { [ -e $1 ] && . $1; } 2>/dev/null
+  local DPKGS="curl git make jq bash-completion" NEWIP=$1
   #####
-  if [ X${ID_LIKE}Y${ID}Z == XdebianYubuntuZ ]; then
-    ## Ubuntu
-    set -- /etc/resolv.conf
-    echo nameserver 114.114.114.114 >$1
-    ##
-    local ustcurl=https://mirrors.ustc.edu.cn/ubuntu
-    set -- /etc/apt/sources.list
-    set -- $1 $1.d/ubuntu.sources
+  if [ X${ID_LIKE}Y${ID}Z == XdebianYubuntuZ ]; then ## Ubuntu
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    local mary=(
+      https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+      https://mirrors.ustc.edu.cn/ubuntu
+      https://mirrors.aliyun.com/ubuntu
+    )
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    set -- /etc/apt/sources.list /etc/apt/sources.list.d/ubuntu.sources
     sed -i -r 's@//(archive|security)@//cn.archive@' $1 2>/dev/null
-    sed -i -r '^/URIs:/s@.*@URIs: '${ustcurl}'/@' $2 2>/dev/null
-    ##
+    sed -i -r "^/URIs:/s|.*|URIs: ${mary[${MIR_IDX:-0}]}|" $2 2>/dev/null
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     apt update -y && apt install -y ${DPKGS}
-    ##
-    rm -rf /etc/netplan/*.yaml 2>/dev/null
-  else #if [ X${ID_LIKE}Y${ID}Z == XdebianYubuntuZ ]; then
-    ## OpenEuler
+  else ## OpenEuler
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     yum update -y && yum install -y ${DPKGS}
   fi
+  #####
+  echo nameserver 114.114.114.114 >/etc/resolv.conf
   #####
   set -- $HOME/osci https://gitee.com/abldg/osci
   (

@@ -28,7 +28,7 @@ dfn_devel_rustlang() {
   xf_tryinst_cargo() {
     set -- $CARGO_HOME $RUSTUP_HOME
     if [ -d $1 -a -d $2 ]; then
-      [ X1 = X${SHV_EXIST_SK:-1} ] && return
+      [ X1 = X${SHV_SKPEXIST:-1} ] && return
     fi
     ##
     mkdir -p $1 $2

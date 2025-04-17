@@ -18,7 +18,7 @@ dfn_inst_msedge() {
   set -- microsoft-edge-stable
   set -- $1 /usr/bin/$1 $(command -v dpkg)
   [ -x $2 ] && {
-    [ X1 = X${SHV_EXIST_SK:-1} ] && return
+    [ X1 = X${SHV_SKPEXIST:-1} ] && return
   }
   [ X = X$3 ] && return
   set -- ${MYCACHE}/linux-x64-msedge-latest.deb edge/pool/main/m/$1
@@ -46,7 +46,7 @@ dfn_inst_vscode() {
   fi
   set -- /usr/bin/code $(command -v dpkg) 2>/dev/null
   [ -x $1 ] && {
-    [ X1 = X${SHV_EXIST_SK:-1} ] && return
+    [ X1 = X${SHV_SKPEXIST:-1} ] && return
   }
   [ X != X$2 ] && {
     set -- ${MYCACHE}/linux-x64-vscde-latest.deb
