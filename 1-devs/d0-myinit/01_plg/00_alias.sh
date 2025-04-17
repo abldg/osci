@@ -92,7 +92,7 @@ _dodef() {
   alias chg2root='su - root'
   alias crr='complete -r'
   alias srm='sudo rm -rf'
-  # alias xrm='sudo rm -rf'
+  alias npa='[ X != X$(command -v netplan) ] && netplan apply'
 }
 _dodef && unset -f _dodef
 ###EXTRA###@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
