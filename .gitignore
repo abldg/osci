@@ -1,3 +1,4 @@
 .vscode-server/
 *.tmp
 ubt24_incus/
+sealos/

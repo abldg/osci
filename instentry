@@ -8,8 +8,6 @@
 ##==================================----------==================================
 # list_shfiles()
 {
-  GHPROXY=https://ghfast.top
-  MYCACHE=$HOME/.cache/myiok
   MYSHFILES=(
     $(command ls $PWD/*base/*-*.sh 2>/dev/null)
     $(command ls $PWD/*devs/*/*dinst.sh 2>/dev/null)
@@ -18,6 +16,9 @@
   [ X0 = X$(id -u) ] && SP= || SP='sudo '
   TEE="${SP}tee" SED="${SP}sed"
   XTAR="${SP}tar --no-same-owner"
+  GHPROXY=https://ghfast.top
+  MYCACHE=$HOME/.cache/${PWD##*/}
+  mkdir -p $MYCACHE
 } 2>/dev/null
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 if [ X1 != X${SHV_CALLBYMK} ]; then

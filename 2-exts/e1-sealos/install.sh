@@ -6,32 +6,42 @@
 ## LSCT: 2025-04-12 09:42:28
 ## VERS: 1.2
 ##==================================----------==================================
-# set -x
-ds_create_vm() {
-  ##
-  set -- $(echo $HOME/*wksp/devstack 2>/dev/null)
-  [ ! -d $1 ] && return 1
-  cd $1
-  ##
-  set -- demo
-  { . openrc $1 $1; } 2>/dev/null
-  ##
-  set -- id_rsa_demo
-  [ ! -e $1 ] && {
-    openstack keypair create demo >$1
-    chmod 600 $1
+
+dfn_ubt_sealos() {
+  xf_inst_latest_sealos_via_deb() {
+    set -- labring/sealos $MYCACHE/linux-x64-sealos-latest.deb
+    [ -e $2 ] || {
+      local dlexp="command curl -#4fSLo $2 "
+      curl -s4fSL https://api.github.com/repos/$1/releases |
+        jq '.[0]|.assets[]|.browser_download_url' | xargs -n1 |
+        awk -va="${GHPROXY}" -v b="${dlexp}" \
+          '/linux_/&&/amd64.deb/{printf("%s %s/%s\n",b,a,$0)}' |
+        bash -x
+    }
+    [ -e $2 ] && echo "sudo dpkg -i $2"
   }
-  ##
-  set -- demo ubuntu ${VMNAME}
-  local ceopts=
-  ceopts=(
-    openstack
-    server create
-    --nic net-id=$(openstack network show private -c id -f value)
-    --flavor $(openstack flavor show m1.nano -c id -f value)
-    --image $(openstack image show $2 -c ID -f value)
-    --key-name ${1} ${3:-test1}
-  ) 2>/dev/null
-  ${ceopts[@]}
+  ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # echo ${0}::${FUNCNAME}
+  # mt_tipstep
+  mt_thzshflocation
+
+  [ X = X$(command -v sealos) ] && xf_inst_latest_sealos_via_deb
 }
-[ X1 != X${SHV_CALLBYMK} ] && ds_create_vm
+
+##
+(
+  set -xe
+  if [ X = X${SHV_CALLBYMK} ]; then
+    mt_ispkgexist() { :; }
+    mt_wrapdlder() { /usr/bin/curl $@; }
+    mt_tipstep() {
+      echo ${FUNCNAME[1]}
+      . /etc/os-release 2>/dev/null
+    }
+    dfn_ubt_sealos $@
+  fi
+  set +x
+)
