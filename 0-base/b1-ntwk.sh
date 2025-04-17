@@ -56,12 +56,14 @@ dfn_cfgs4ntwk() {
   xf_upt_npyaml() {
     ##via-outter-vars: (ADRINFO),GWIFN,GWIP
     {
-      local tmp_saved=/tmp/x2x
-      local tpl_npyml='network:
+      ##
+      local ymlhead='network:
       #TDL#  version: 2
       #TDL#  ethernets:
-      #TDL#    #eth1: { dhcp4: no, dhcp6: no, addresses: [ RV_CIDR_SPL ] }
-      #TDL#    RV_TKN:
+      #TDL#    #ethX: { dhcp4: no, dhcp6: no, addresses: [ 192.168.166.X ] }
+      #TDL#    RV_TKN:'
+      ##
+      local ymlfoot='
       #TDL#      dhcp4: no
       #TDL#      dhcp6: no
       #TDL#      addresses:
@@ -69,20 +71,34 @@ dfn_cfgs4ntwk() {
       #TDL#      routes:
       #TDL#      - { metric: 100, to: 0.0.0.0/0, via: RV_GWIP }
       #TDL#      nameservers:
-      #TDL#        addresses: [ 223.5.5.5,114.114.114.114,8.8.8.8 ]'
+      #TDL#        addresses: [ 223.5.5.5, 114.114.114.114, 8.8.8.8 ]'
+      ##
+      local ymlbody=
+      if [ ${#SHV_N5N_USE_BR} -ne 0 ]; then
+        ymlbody=' { dhcp4: no, dhcp6: no }
+        #TDL#  bridges:
+        #TDL#    '${SHV_N5N_USE_BR}':
+        #TDL#      interfaces:
+        #TDL#      - RV_TKN'
+      fi
+      ##
       set -- ${ADRINFO[@]}
       set -- ${GWIFN} ${GWIP} $1/$2 192.168.166.$3/$2
-      echo "${tpl_npyml}" | sed -r \
-        -e "s@RV_TKN@${1}@g" \
-        -e "s@RV_GWIP@${2}@" \
-        -e "s@RV_CIDR_USE@${3}@g" \
-        -e "s@RV_CIDR_SPL@${4}@g" \
-        -e 's@\s+#TDL#@@g' >$tmp_saved
+      local sexps=(
+        -e "s@RV_TKN@${1}@g"
+        -e "s@RV_GWIP@${2}@"
+        -e "s@RV_CIDR_USE@${3}@g"
+        -e "s@RV_CIDR_SPL@${4}@g"
+        -e "s@\s+#TDL#@@g"
+      )
+      echo "${ymlhead}${ymlbody}${ymlfoot}" | sed -r ${sexps[@]} >/tmp/x2x
     } 2>/dev/null
     ##
-    set -- /etc/netplan
-    sudo rm -rf $1/*.yaml 2>/dev/null
-    sudo install -m 0600 $tmp_saved $1/00-static.yaml
+    set -- /etc/netplan /tmp/x2x
+    [ -e $2 ] && {
+      sudo rm -rf $1/*.yaml 2>/dev/null
+      sudo install -m 0600 $2 $1/00-static.yaml
+    }
   }
   ###///////////////////////////////////////////////////////////////////////////
   xf_upt_oescrt() {

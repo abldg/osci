@@ -16,6 +16,7 @@ lst_optional+=$(pfx_cfg)/cfgs4sshd
 lst_optional+=$(pfx_cfg)/fix_ubt2204_n5n
 ##
 lst_optional+=$(pfx_cfg)/cfgs4ntwk
+egs_cfgs4ntwk+=SHV_N5N_USE_BR=$(if $(UB),$(UB),)
 ##
 lst_optional+=$(pfx_cfg)/fix_aptmirurl
 egs_fix_aptmirurl+=SHV_MIRURL_IDX=$(if $(MI),$(MI),0)
