@@ -17,6 +17,10 @@ endif
 ##
 V2S+=SHV_CALLBYMK=1
 V2S+=SHV_DEBUGTHZ=$(VD)
+V2S+=SHV_RESET_HN=$(if $(HN),$(HN),)
+V2S+=SHV_RESET_IP=$(if $(IP),$(IP),)
+V2S+=SHV_RESET_PW=$(if $(PW),$(PW),$(if $(pswd),$(pswd),))
+V2S+=SHV_NPAPLNOW=$(if $(NA),$(NA),$(if $(npan),$(npan),0))
 V2S+=SHV_SKPEXIST=$(if $(SK),$(SK),$(if $(skip),$(skip),1))
 ##
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
