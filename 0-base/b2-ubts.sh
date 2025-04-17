@@ -103,7 +103,7 @@ dfn_cfgs4ubt() {
     dfn_checkpkgs
     dfn_cfgs4sshd
     dfn_cfgs4ntwk
-    dfn_fix_ubt2204n6n
+    dfn_fix_ubt2204_n5n
     dfn_ghbins
     ##
     set -- /etc/.git supda supda@lclsvr.mgr

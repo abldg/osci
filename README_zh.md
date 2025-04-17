@@ -21,6 +21,7 @@ osci : **O**perating **S**ystem **C**onfiguration **I**nitialization
 mydoinst() {
   { [ ! -e /etc/os-release ] && return || . /etc/os-release; } 2>/dev/null
   #####
+  local NEWIP=${1}
   local DPKGS="curl git make jq bash-completion"
   #####
   if [ X${ID_LIKE}Y${ID}Z == XdebianYubuntuZ ]; then ## Ubuntu
