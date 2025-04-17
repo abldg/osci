@@ -84,7 +84,7 @@ dfn_ubt_incus() {
   set -- https://mirrors.nju.edu.cn/lxc-images/
   incus remote add images $1 --protocol=simplestreams --public
   ##
-  set -- /opt/mytools/iok/2-exts/1-incus/incus-ui.crt
+  set -- $(dirname $(mt_thzshflocation))/incus-ui.crt
   [ -e $1 ] && incus config trust add-certificate $1
 }
 # ##
