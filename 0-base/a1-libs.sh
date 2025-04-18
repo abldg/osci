@@ -6,25 +6,6 @@
 ## LSCT: 2025-04-17 00:22:28
 ## VERS: 1.5
 ##==================================----------==================================
-## //////////////////////////////// [COLORS] //////////////////////////////// ##
-{
-  export CRED='\e[31m'
-  export CGRN='\e[32m'
-  export CYLW='\e[33m'
-  export CBLU='\e[34m'
-  export CPLP='\e[35m'
-  export CYAN='\e[36m'
-  export CEND='\e[0m'
-  _cred() { { printf "${CRED}${@}${CEND}\n" && exit 1; } 2>/dev/null; }
-  _cblu() { { printf "${CBLU}${@}${CEND}\n"; } 2>/dev/null; }
-  _cyan() { { printf "${CYAN}${@}${CEND}\n"; } 2>/dev/null; }
-  _cgrn() { { printf "${CGRN}${@}${CEND}\n"; } 2>/dev/null; }
-  _cplp() { { printf "${CPLP}${@}${CEND}\n"; } 2>/dev/null; }
-  _cylw() { { printf "${CYLW}${@}${CEND}\n"; } 2>/dev/null; }
-  ##
-  declare -gA GPROMPTS=()
-} 2>/dev/null
-###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mt_tipstep() {
   {
     [ X0 = X${SHV_DEBUGTHZ:-0} ] && return
@@ -54,12 +35,20 @@ mt_ispkgexist() {
   ##arg1: pkgname[,binfilename]
   {
     set -- ${1//,/ }
-    if ! command -v ${2:-${1}} &>/dev/null; then
-      _cylw " ----> attempted to install: [$1]"
+    GPROMPTS+=(
+      [cn_try_inst_pkg]="${PFX4SUB}尝试安装: [${CBLU}$1${CYLW}]"
+      [en_try_inst_pkg]="${PFX4SUB}attempted to install: [${CBLU}$1${CYLW}]"
+      [cn_pkg_instdone]="${PFX4SUB}已安装过: [${CGRN}$1${CYAN}]"
+      [en_pkg_instdone]="${PFX4SUB}done installed: [${CGRN}$1${CYAN}]"
+    )
+    local vs=$(command -v ${2:-${1}} 2>/dev/null)
+    if [ ${#vs} -eq 0 ]; then
+      _yellow try_inst_pkg
       sudo ${PCMDIST} $1
+      vs=$(command -v ${2:-${1}} 2>/dev/null)
     fi
-    _cyan " ----> done installed: [$1]"
-  } 2>/dev/null
+    [ ${#vs} -ge 1 ] && _cyan pkg_instdone
+  } #2>/dev/null
 }
 
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,3 +101,47 @@ mt_thzshflocation() {
 }
 
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{
+  ## [TIPBSE] ##
+  xf_tiprint() {
+    case ${CLR} in
+    [rR] | red) printf "${CRED}" && red_exit=1 ;;
+    [bB] | blue) printf "${CBLU}" ;;
+    [cC] | cyan) printf "${CYAN}" ;;
+    [gG] | green) printf "${CGRN}" ;;
+    [pP] | purple) printf "${CPLP}" ;;
+    [yY] | yellow) printf "${CYLW}" ;;
+    esac
+    ##
+    if [[ "X${*//[a-z0-9_]/}" = "X" ]]; then
+      local bk=$1
+      set -- "${GPROMPTS[${SHV_THIZLANG:-cn}_$bk]}"
+      [ ${#1} -ge 1 ] && printf "${1}" || printf "${bk}"
+    else
+      printf "${*}"
+    fi
+    printf "${CEND}"
+    ##
+    [ X${SW_NEWLINE:-1} = X1 ] && echo
+    [ X1 = X${red_exit} ] && [[ X${0}Z != X*bashZ ]] && exit 1
+  }
+  ## [COLORS] ##
+  mcary=(RED:"31;1" GRN:32 YLW:33 BLU:34 PLP:35 YAN:36 END:0)
+  for x in ${mcary[@]}; do
+    p=(${x//:/ }) && eval "export C${p[0]}='\e[${p[1]}m'"
+  done
+  for x in red blue cyan green purple yellow; do
+    eval "_${x}(){ { CLR=${x} xf_tiprint \$@; } 2>/dev/null; }"
+    # eval "_${x}(){ CLR=${x} xf_tiprint \$@; }"
+  done
+  unset -v x p mcary
+  ##
+  export PFX4SUB='@----> '
+  declare -gA GPROMPTS=()
+} 2>/dev/null
+##TESTS##
+# _green "just_a_test_message_for_invalid_keyword2"
+# _red "just_a_test_message_for_invalid_keyword1"
+# _blue "just_a_test_message_for_invalid_keyword2"
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

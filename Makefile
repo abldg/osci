@@ -5,8 +5,10 @@ only_for_run_on_amd64_or_arm64_machine:
 endif
 endif
 ###------------------------------BGN--------------------------------------------
+en?=1
+#dbg?=1
 ##
-# VE:=$(if $(ve),$(ve),$(if $(en),en,cn))
+VE:=$(if $(ve),$(ve),$(if $(en),en,cn))
 VD:=$(if $(vd),$(vd),$(if $(dbg),1,0))
 VX:=$(if $(vx),-x,)
 VQ:=@
@@ -17,6 +19,7 @@ endif
 ##
 V2S+=SHV_CALLBYMK=1
 V2S+=SHV_DEBUGTHZ=$(VD)
+V2S+=SHV_THIZLANG=$(VE)
 V2S+=SHV_RESET_HN=$(if $(HN),$(HN),)
 V2S+=SHV_RESET_IP=$(if $(IP),$(IP),)
 V2S+=SHV_RESET_PW=$(if $(PW),$(PW),$(if $(pswd),$(pswd),))

@@ -20,7 +20,7 @@ dfn_fix_ubt2204_n5n() {
 dfn_fix_aptmirurl() {
   mt_tipstep
   if [[ $VERSION_CODENAME != @(noble|jammy|focal|bionic) ]]; then
-    _cylw "deb822 only support 18.04+"
+    _yellow "deb822 only support 18.04+"
     return
   fi
   ##

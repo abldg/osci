@@ -55,13 +55,13 @@ dfn_ubt_incus() {
   mt_tipstep
   local oscode=${VERSION_CODENAME}
   if [[ $oscode != @(noble|jammy|focal|bullseye|bookworm) ]]; then
-    _cred "[FATAL] only support ubuntu20.04+ or debian 11/12"
+    _red "[FATAL] only support ubuntu20.04+ or debian 11/12"
   fi
   if [[ $(systemd-detect-virt) != @(none|kvm) ]]; then
-    _cred "[FATAL] incus need kvm-based-virt-server or a bare-metal-server"
+    _red "[FATAL] incus need kvm-based-virt-server or a bare-metal-server"
   fi
   if [[ X0 != X$(id -u) ]]; then
-    _cred "[FATAL] only support root run this tools"
+    _red "[FATAL] only support root run this tools"
   fi
   ##
   set -- /usr/share/keyrings/zabbly.asc https://pkgs.zabbly.com/key.asc

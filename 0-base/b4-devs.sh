@@ -20,6 +20,7 @@ dfn_checkpkgs() {
       file
       fping
       git
+      tig
       ipcalc
       lrzsz,rz
       make
