@@ -104,23 +104,21 @@ mt_thzshflocation() {
 {
   ## [TIPBSE] ##
   xf_tiprint() {
+    local cc= bk="${*}" zl="${SHV_THIZLANG:-cn}"
     case ${CLR} in
-    [rR] | red) printf "${CRED}" && red_exit=1 ;;
-    [bB] | blue) printf "${CBLU}" ;;
-    [cC] | cyan) printf "${CYAN}" ;;
-    [gG] | green) printf "${CGRN}" ;;
-    [pP] | purple) printf "${CPLP}" ;;
-    [yY] | yellow) printf "${CYLW}" ;;
+    cred | CRED | [rR] | red) cc="${CRED}" && red_exit=1 ;;
+    cblu | CBLU | [bB] | blue) cc="${CBLU}" ;;
+    cyan | CYAN | [cC] | cyan) cc="${CYAN}" ;;
+    cgrn | CGRN | [gG] | green) cc="${CGRN}" ;;
+    cplp | CPLP | [pP] | purple) cc="${CPLP}" ;;
+    cylw | CYLW | [yY] | yellow) cc="${CYLW}" ;;
     esac
     ##
-    if [[ "X${*//[a-z0-9_]/}" = "X" ]]; then
-      local bk=$1
-      set -- "${GPROMPTS[${SHV_THIZLANG:-cn}_$bk]}"
-      [ ${#1} -ge 1 ] && printf "${1}" || printf "${bk}"
-    else
-      printf "${*}"
+    if [[ "X${bk//[a-z0-9_]/}" = "X" ]]; then
+      set -- "${GPROMPTS[${zl}_$bk]}"
+      [ ${#1} -ge 1 ] && bk="${*}"
     fi
-    printf "${CEND}"
+    printf -- "${cc}${bk}${CEND}"
     ##
     [ X${SW_NEWLINE:-1} = X1 ] && echo
     [ X1 = X${red_exit} ] && [[ X${0}Z != X*bashZ ]] && exit 1
@@ -131,14 +129,17 @@ mt_thzshflocation() {
     p=(${x//:/ }) && eval "export C${p[0]}='\e[${p[1]}m'"
   done
   for x in red blue cyan green purple yellow; do
-    eval "_${x}(){ { CLR=${x} xf_tiprint \$@; } 2>/dev/null; }"
-    # eval "_${x}(){ CLR=${x} xf_tiprint \$@; }"
+    if [ X1 = X${SHV_DEBUGTHZ:-0} ]; then
+      eval "_${x}(){ CLR=${x} xf_tiprint \$@; }"
+    else
+      eval "_${x}(){ { CLR=${x} xf_tiprint \$@; } 2>/dev/null; }"
+    fi
   done
   unset -v x p mcary
   ##
   export PFX4SUB='@----> '
   declare -gA GPROMPTS=()
-} 2>/dev/null
+} #2>/dev/null
 ##TESTS##
 # _green "just_a_test_message_for_invalid_keyword2"
 # _red "just_a_test_message_for_invalid_keyword1"
