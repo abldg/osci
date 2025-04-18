@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 ## coding=utf-8
 ##==================================----------==================================
-## FILE: install.sh
+## FILE: s1_dinst.sh
 ## MYPG: abldg, https://github.com/abldg
-## LSCT: 2025-04-12 09:42:28
-## VERS: 1.2
+## LSCT: 2025-04-18 00:13:07
+## VERS: 1.3
 ##==================================----------==================================
 
 dfn_ubt_sealos() {
@@ -30,10 +30,10 @@ dfn_ubt_sealos() {
 
   [ X = X$(command -v sealos) ] && xf_inst_latest_sealos_via_deb
 }
-  bash /tmp/install.sh \
-  --cloud-version=v5.0.1 \
-  --image-registry=registry.cn-shanghai.aliyuncs.com --zh \
-  --proxy-prefix=https://ghfast.top
+  # bash /tmp/install.sh \
+  # --cloud-version=v5.0.1 \
+  # --image-registry=registry.cn-shanghai.aliyuncs.com --zh \
+  # --proxy-prefix=https://ghfast.top
 ##
 (
   set -xe

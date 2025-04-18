@@ -11,7 +11,7 @@
   MYSHFILES=(
     $(command ls $PWD/*base/*-*.sh 2>/dev/null)
     $(command ls $PWD/*devs/*/*dinst.sh 2>/dev/null)
-    $(command ls $PWD/*exts/*/*.sh 2>/dev/null)
+    $(command ls $PWD/*exts/*/*dinst.sh 2>/dev/null)
   )
   [ X0 = X$(id -u) ] && SP= || SP='sudo '
   TEE="${SP}tee" SED="${SP}sed"
