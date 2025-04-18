@@ -115,10 +115,10 @@ mt_thzshflocation() {
     esac
     ##
     if [[ "X${bk//[a-z0-9_]/}" = "X" ]]; then
-      set -- "${GPROMPTS[${zl}_$bk]}"
+      set -- "${GPROMPTS[${zl}_${bk#*_}]}"
       [ ${#1} -ge 1 ] && bk="${*}"
     fi
-    printf -- "${cc}${bk}${CEND}"
+    printf -- "${cc}${bk}${CEND}" | sed -r 's@^\s+#TDL#@@g'
     ##
     [ X${SW_NEWLINE:-1} = X1 ] && echo
     [ X1 = X${red_exit} ] && [[ X${0}Z != X*bashZ ]] && exit 1
