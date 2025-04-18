@@ -103,7 +103,7 @@ mt_thzshflocation() {
 ###~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 {
   ## [TIPBSE] ##
-  xf_tiprint() {
+  mt_getprompt() {
     local cc= bk="${*}" zl="${SHV_THIZLANG:-cn}"
     case ${CLR} in
     cred | CRED | [rR] | red) cc="${CRED}" && red_exit=1 ;;
@@ -115,7 +115,8 @@ mt_thzshflocation() {
     esac
     ##
     if [[ "X${bk//[a-z0-9_]/}" = "X" ]]; then
-      set -- "${GPROMPTS[${zl}_${bk#*_}]}"
+      [[ ${bk}X == @(cn|en|jp|fr|ru|de)_*X ]] && bk="${bk#*_}"
+      set -- "${GPROMPTS[${zl}_${bk}]}"
       [ ${#1} -ge 1 ] && bk="${*}"
     fi
     printf -- "${cc}${bk}${CEND}" | sed -r 's@^\s+#TDL#@@g'
@@ -130,9 +131,9 @@ mt_thzshflocation() {
   done
   for x in red blue cyan green purple yellow; do
     if [ X1 = X${SHV_DEBUGTHZ:-0} ]; then
-      eval "_${x}(){ CLR=${x} xf_tiprint \$@; }"
+      eval "_${x}(){ CLR=${x} mt_getprompt \$@; }"
     else
-      eval "_${x}(){ { CLR=${x} xf_tiprint \$@; } 2>/dev/null; }"
+      eval "_${x}(){ { CLR=${x} mt_getprompt \$@; } 2>/dev/null; }"
     fi
   done
   unset -v x p mcary
