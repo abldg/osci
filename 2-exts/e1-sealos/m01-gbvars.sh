@@ -1,49 +1,47 @@
 #!/usr/bin/env bash
 ## coding=utf-8
 ##==================================----------==================================
-## FILE: a1-lib-prompt.sh
+## FILE: m01-gbvars.sh
 ## MYPG: abldg, https://github.com/abldg
-## LSCT: 2025-04-18 05:59:26
-## VERS: 0.2
+## LSCT: 2025-04-18 08:57:27
+## VERS: 0.4
 ##==================================----------==================================
-declare -gA SLC_PROMPTS=()
-## [COLORS] ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mcary=(RED:"31;1" GRN:32 YLW:33 BLU:34 PLP:35 YAN:36 END:0)
-for x in ${mcary[@]}; do
-  p=(${x//:/ }) && eval "export C${p[0]}='\e[${p[1]}m'"
-done
-for x in red blue cyan green purple yellow; do
-  if [ X1 = X${SHV_DEBUGTHZ:-0} ]; then
-    eval "_${x}(){ CLR=${x} xf_tiprint \$@; }"
-  else
-    eval "_${x}(){ { CLR=${x} xf_tiprint \$@; } 2>/dev/null; }"
-  fi
-done
-unset -v x p mcary
 ###
-mt_getprompt() {
-  local cc= bk="${*}" zl="${ZLG:-cn}"
-  case ${CLR} in
-  cred | CRED | [rR] | red) cc="${CRED}" && red_exit=1 ;;
-  cblu | CBLU | [bB] | blue) cc="${CBLU}" ;;
-  cyan | CYAN | [cC] | cyan) cc="${CYAN}" ;;
-  cgrn | CGRN | [gG] | green) cc="${CGRN}" ;;
-  cplp | CPLP | [pP] | purple) cc="${CPLP}" ;;
-  cylw | CYLW | [yY] | yellow) cc="${CYLW}" ;;
-  *) cc="${CEND}" ;;
-  esac
-  ##
-  {
-    if [[ "X${bk//[a-z0-9_]/}" = "X" ]]; then
-      [[ ${bk}X == @(cn|en|jp|fr|ru|de)_*X ]] && bk="${bk#*_}"
-      set -- "${SLC_PROMPTS[${zl}_${bk}]}"
-      [ ${#1} -ge 1 ] && bk="${*}"
-    fi
-    printf -- "${cc}${bk}${CEND}" | sed -r 's@^\s+#TDL#@@g'
-    ##
-    [ X${SW_NEWLINE:-1} = X1 ] && printf "\n"
-  } 2>/dev/null
-}
+{
+  SLC_GLBVARS+=(
+    CLOUD_DIR,${HOME}/.sealos/cloud
+    SEALOS_VERSION,v5.0.1
+    cloud_version,latest
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # mongodb_version,mongodb-6.0
+    # master_ips
+    # node_ips
+    # ssh_private_key
+    # ssh_password
+    # pod_cidr
+    # service_cidr
+    # cloud_domain
+    # cloud_port
+    # input_cert
+    # cert_path
+    # key_path
+    # single,y/n
+    # acme,y/n
+    ##~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    image_registry,docker.io
+    image_repository,labring
+    kubernetes_version,1.28.11
+    cilium_version,1.15.8
+    cert_manager_version,1.14.6
+    helm_version,3.16.2
+    openebs_version,3.10.0
+    higress_version,2.0.1
+    kubeblocks_version,0.8.2
+    metrics_server_version,0.6.4
+    victoria_metrics_k8s_stack_version,1.96.0
+    acmedns_host,auth.acme-dns.io
+  )
+} 2>/dev/null
 ###
 {
   SLC_PROMPTS+=(
@@ -216,5 +214,3 @@ mt_getprompt() {
               #TDL#  --help                          # 帮助信息"
   )
 } 2>/dev/null
-# ZLG=en mt_getprompt usage
-# CLR=cyan mt_getprompt cn_i_have_confirmed

@@ -2,4 +2,4 @@
 *.tmp
 ubt24_incus/
 sealos/
-.env.sh
+*env.sh

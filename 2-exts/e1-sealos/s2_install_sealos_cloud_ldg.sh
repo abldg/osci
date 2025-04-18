@@ -6,48 +6,34 @@
 ## LSCT: 2025-04-18 00:12:51
 ## VERS: 0.1
 ##==================================----------==================================
-{
-  [ X0 = X$(id -u) ] && SP= || SP='sudo '
-  TEE="${SP}tee" SED="${SP}sed"
-  XTAR="${SP}tar --no-same-owner"
-  GHPROXY=https://ghfast.top
-  # MYCACHE=$HOME/.cache/${PWD##*/}
-  # mkdir -p $MYCACHE
-} 2>/dev/null
-
-mt_locate_thzfunc() {
-  {
-    local wf=${FUNCNAME[1]}
-    [ $# -ge 1 ] && wf=$1
-    shopt -s extdebug
-    set -- $(declare -F ${wf})
-    shopt -u extdebug
-    realpath $3
-  } 2>/dev/null
-}
-mt_tipstep() {
-  {
-    [ X0 = X${SHV_DEBUGTHZ:-0} ] && return
-    # [ X1 != X${SHV_CALLBYMK} ] && exit 1
-    local ci=($(caller 0))
-    local msg="[${CBLU}${ci[2]}$CEND,${CGRN}${ci[1]}$CEND,${CYLW}${ci[0]}$CEND]"
-    printf "====>${msg}${1:+ [${CYAN}$1${CEND}]}<====\n"
-  } 2>/dev/null
-}
 dfn_ubt_sealosx() {
-  set -- $(mt_locate_thzfunc)
-  cd ${1%/*}
-  MYSHFILES=(
-    $(command ls $PWD/a*-*.sh 2>/dev/null)
-    /etc/os-release
-  )
+  {
+    shopt -s extdebug
+    set -- $(declare -F ${FUNCNAME})
+    shopt -u extdebug
+    cd $(dirname $(realpath $3))
+    local MYSHFILES=(
+      $(command ls $PWD/m*-*.sh 2>/dev/null)
+      /etc/os-release
+    )
+  } 2>/dev/null
   for x in ${MYSHFILES[@]}; do . $x; done 2>/dev/null
   # Configurations
-  echo ${ID}
-  echo ${ID_LIKE}
-  echo ${UBUNTU_CODENAME}
-  echo ${victoria_metrics_k8s_stack_version}
-  ZL=en mt_getprompt installing_cloud
+  mt_load_envs
+  mt_setlang
+
+  # mt_getprompt usage
+  xf_set_mongo_version() {
+    set +e
+    grep avx /proc/cpuinfo >/dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      mt_getprompt "mongo_avx_requirement"
+      mongodb_version="mongodb-4.4"
+    fi
+    set -e
+  }
+  xf_set_mongo_version
+  env
 }
 
 # set -xe
